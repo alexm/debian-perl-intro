@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>El equipo de Perl en el proyecto Debian</title>
+
+		<meta name="description" content="El equipo de Perl en el proyecto Debian">
+		<meta name="author" content="Alex Muntada">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+				<section>
+					<h1>Debian pkg-perl</h1>
+					<h3>El equipo de Perl en el proyecto Debian</h3>
+					<p>
+						<small>por <a href="http://alexm.org/">Alex Muntada</a> / <a href="http://twitter.com/alexmuntada">@alexmuntada</a></small>
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h3>¿Cuántos paquetes gestiona el equipo?</h3>
+						<h1 class="fragment">2870+</h1>
+					</section>
+					<section>
+						<h3>¿Cuántos miembros forman el equipo?</h3>
+						<h1 class="fragment">248</h1>
+					</section>
+					<section>
+						<h3>¿Quién puede formar parte del equipo?</h3>
+						<h1 class="fragment"><code>/.+/</code></h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1><a href="https://wiki.debian.org/Teams/DebianPerlGroup/Bienvenido">Bienvenido</a></h1>
+						<blockquote>
+							«¿Estás considerando unirte al grupo Perl de Debian o simplemente fuiste agregado al grupo en Alioth?
+							Entonces esta página debería ayudarte con tu decisión y tus primeros pasos.»
+						</blockquote>
+					</section>
+					<section>
+						<h2><a href="https://alioth.debian.org/projects/pkg-perl">Alioth</a></h2>
+						<p>Gestor de proyectos de Debian</p>
+						<ul>
+							<li>Nombres de usuario</li>
+							<li>Claves SSH</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Listas de correo</h2>
+						<ul>
+							<li><a href="http://lists.debian.org/debian-perl/">debian-perl</a></li>
+							<li><a href="http://lists.alioth.debian.org/mailman/listinfo/pkg-perl-maintainers">pkg-perl-maintainers</a></li>
+						</ul>
+					</section>
+					<section>
+						<h2>IRC (OFTC)</h2>
+						<p><a href="http://webchat.oftc.net/?channels=#debian-perl">#debian-perl</a></p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Primeros pasos</h1>
+					</section>
+					<section>
+						<h2><a href="http://pet.debian.net/pkg-perl/pet.cgi">PET</a></h2>
+						<p>Package Entropy Tracker</p>
+						<ul>
+							<li>Ready For Upload</li>
+							<li>Packages with RC bugs</li>
+							<li>Missing tags</li>
+							<li>Newer upstream version</li>
+							<li>Problems with debian/watch</li>
+							<li>New packages</li>
+							<li>With bugs</li>
+							<li>Work in progress</li>
+						</ul>
+					</section>
+					<section>
+						<h2><a href="https://www.debian.org/devel/wnpp/">WNPP</a></h2>
+						<p>Work-Needing and Prospective Packages</p>
+						<ul>
+							<li>Intention To Package (ITP)</li>
+							<li>Orphaned (O)</li>
+							<li>Request For Adoption (RFA)</li>
+							<li>Request For Help (RFH)</li>
+							<li>Request For Packaging (RFP)</li>
+						</ul>
+					</section>
+					<section>
+						<h2><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=742195">Bug#742195</a></h2>
+						<pre><code class="plain">
+From: Alex Muntada &lt;alexm@alexm.org&gt;
+To: submit@bugs.debian.org
+Subject: ITP: libmojolicious-plugin-cgi-perl -- Run CGI script from Mojolicious
+Date: Thu, 20 Mar 2014 15:55:28 +0100
+
+Package: wnpp
+Severity: wishlist
+Owner: Alex Muntada &lt;alexm@alexm.org&gt;
+
+* Package name    : libmojolicious-plugin-cgi-perl
+  Version         : 0.07
+  Upstream Author : Jan Henning Thorsen &lt;jhthorsen@cpan.org&gt;
+* URL             : https://metacpan.org/release/Mojolicious-Plugin-CGI
+* License         : GPL, Artistic
+  Programming Lang: Perl
+  Description     : Mojolicious::Plugin::CGI runs CGI scripts from Mojolicious
+
+Mojolicious::Plugin::CGI enables Mojolicious to run Perl CGI scripts.
+It does so by forking a new process with a modified environment and
+reads the STDOUT in a non-blocking matter.
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Git</h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Conclusiones</h2>
+						<ul>
+							<li class="fragment">Debian es un proyecto complejo.</li>
+							<li class="fragment">El equipo de Perl es muy amigable.</li>
+							<li class="fragment">Haciendo paquetes se aprende un montón.</li>
+							<li class="fragment">Cualquiera puede ayudar un poquito!</li>
+						</ul>
+					</section>
+					<section>
+						<h2>¿Preguntas?</h2>
+						<p>por Alex Muntada / @alexmuntada</p>
+					</section>
+					<section>
+						<pre><code class="perl">
+use Debian;
+use Perl;
+						</code></pre>
+					</section>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
