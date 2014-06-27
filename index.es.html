@@ -36,14 +36,13 @@
 
 			<div class="slides">
 				<section>
-					<h1>Debian pkg-perl</h1>
-					<h3>El equipo de Perl en el proyecto Debian</h3>
-					<p>
-						<small>por <a href="http://alexm.org/">Alex Muntada</a> / <a href="http://twitter.com/alexmuntada">@alexmuntada</a></small>
-					</p>
-				</section>
-
-				<section>
+					<section>
+						<h1><a href="https://wiki.debian.org/Teams/DebianPerlGroup">DebianPerlGroup</a></h1>
+						<h3>El equipo de Perl en el proyecto Debian</h3>
+						<p>
+							<small>por <a href="http://alexm.org/">Alex Muntada</a> / <a href="http://twitter.com/alexmuntada">@alexmuntada</a></small>
+						</p>
+					</section>
 					<section>
 						<h3>¿Cuántos paquetes gestiona el equipo?</h3>
 						<h1 class="fragment">2870+</h1>
@@ -84,6 +83,30 @@
 					<section>
 						<h2>IRC (OFTC)</h2>
 						<p><a href="http://webchat.oftc.net/?channels=#debian-perl">#debian-perl</a></p>
+					</section>
+					<section>
+						<h2>Reuniones</h2>
+						<ul>
+							<li>low hanging fruits</li>
+							<li>debcamp</li>
+							<li>debconf</li>
+						</ul>
+					</section>
+					<section>
+						<h2><a href="https://wiki.debian.org/Teams/DebianPerlGroup/OpenTasks">OpenTasks</a></h2>
+						<ul>
+							<li>Policy / issues for discussion</li>
+							<li>Release-critical bugs</li>
+							<li>Leaf package with RC Bugs</li>
+							<li>Transitions</li>
+							<li>Packages/tools</li>
+							<li>Recurring tasks</li>
+							<li>Background tasks</li>
+							<li>Nice to have, some day</li>
+							<li>Subpages</li>
+							<li>Links</li>
+							<li>History</li>
+						</ul>
 					</section>
 				</section>
 
@@ -145,7 +168,408 @@ reads the STDOUT in a non-blocking matter.
 
 				<section>
 					<section>
-						<h1>Git</h1>
+						<h1>Paquetes</h1>
+					</section>
+					<section>
+						<h4>unstable</h4>
+						<h3>testing</h3>
+						<h2>stable</h2>
+					</section>
+					<section>
+						<h2><a href="https://github.com/alexm/debian-perl-vagrant">Debian Perl Vagrant</a></h2>
+						<pre><code class="bash">
+git clone https://github.com/alexm/debian-perl-vagrant.git
+cd debian-perl-vagrant
+git submodule update --init
+vagrant up --no-provision
+vagrant ssh -c "sudo apt-get update"
+vagrant ssh -c "sudo apt-get install puppet-common"
+vagrant provision
+vagrant ssh
+						</pre></code>
+					</section>
+					<section>
+						<h3>Identificarse</h3>
+						<pre><code class="bash">
+git config --global user.name "Your Name"
+git config --global user.email "your.name@example.org"
+echo 'export DEBFULLNAME="Your Name"'          &gt;&gt; ~/.bash_aliases
+echo 'export DEBEMAIL="your.name@example.org"' &gt;&gt; ~/.bash_aliases
+echo 'Host git.debian.org'                     &gt;&gt; ~/.ssh/config
+echo '    user your-alioth-username'           &gt;&gt; ~/.ssh/config
+						</pre></code>
+					</section>
+					<section>
+						<h3>Clonar el proyecto</h3>
+						<pre><code class="bash">
+mkdir ~/src
+cd ~/src
+git clone ssh://git.debian.org/git/pkg-perl/meta.git pkg-perl
+						</pre></code>
+					</section>
+					<section>
+						<h3>Crear un nuevo paquete</h3>
+						<pre><code class="bash">
+mkdir ~/src/pkg-perl/packages
+cd ~/src/pkg-perl/packages
+dh-make-perl --pkg-perl --cpan Foo::Bar
+						</pre></code>
+					</section>
+					<section>
+						<h3>Publicar el nuevo repositorio</h3>
+						<pre><code class="bash">
+git config --global push.default simple
+cd ~/src/pkg-perl/packages/libfoo-bar-perl
+git status
+git log
+git remote -v
+git branch -av
+dpt alioth-repo
+						</pre></code>
+					</section>
+					<section>
+						<h3>Parchear el código</h3>
+						<pre><code class="bash">
+cd ~/src/pkg-perl/packages/libfoo-bar-perl
+quilt new fix-something.patch
+quilt edit path/to/file
+quilt fold &lt; someone-elses-patch.diff
+quilt refresh
+quilt pop
+prove -e "patchedit check" debian/patches/fix-something.patch
+git add debian/patches
+git commit
+git push --all
+						</pre></code>
+					</section>
+					<section>
+						<h3>Construir el paquete</h3>
+						<pre><code class="bash">
+sudo cowbuilder --create
+cd ~/src/pkg-perl/packages/libfoo-bar-perl
+pdebuild --pbuilder cowbuilder
+lpdb
+						</pre></code>
+					</section>
+					<section>
+						<h3>Actualizar la fuente del paquete</h3>
+						<pre><code class="bash">
+cd ~/src/pkg-perl/packages/libfoo-bar-perl
+uscan --report
+gbp-pull
+gbp import-orig --uscan --pristine-tar
+						</pre></code>
+					</section>
+					<section>
+						<h3>Lanzar una nueva versión</h3>
+						<pre><code class="bash">
+cd ~/src/pkg-perl/packages/libfoo-bar-perl
+dch -r
+git commit
+git push --all
+						</pre></code>
+					</section>
+					<section>
+						<h3>Publicar el paquete</h3>
+						<ol>
+							<li>Construir el paquete firmado.</li>
+							<li>Publicar el paquete.</li>
+							<li>Esperar que ftpmaster lo acepte.</li>
+						</ol>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1><code>debian/*</code></h1>
+					</section>
+					<section>
+						<h2><code>debian/changelog</code></h2>
+						<pre><code>
+libmojolicious-plugin-cgi-perl (0.09-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * debian/rules: drop removal of README.pod which is not shipped anymore.
+
+ -- gregor herrmann &lt;gregoa@debian.org&gt;  Fri, 20 Jun 2014 17:19:36 +0200
+
+libmojolicious-plugin-cgi-perl (0.08-2) unstable; urgency=medium
+
+  * Remove README.pod and and Mojolicious::Plugin::README.3pm.
+
+ -- Alex Muntada &lt;alexm@alexm.org&gt;  Thu, 12 Jun 2014 18:15:27 +0200
+
+libmojolicious-plugin-cgi-perl (0.08-1) unstable; urgency=low
+
+  * Initial Release. (Closes: #742195)
+
+ -- Alex Muntada &lt;alexm@alexm.org&gt;  Tue, 10 Jun 2014 21:11:30 +0200
+						</code></pre>
+					</section>
+					<section>
+						<h2><code>debian/rules</code></h2>
+						<pre><code>
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_test:
+	# skip leaky pipes test
+	# https://github.com/jhthorsen/mojolicious-plugin-cgi/issues/6
+	DEBIAN_BUILD=1 dh_auto_test
+						</code></pre>
+					</section>
+					<section>
+						<h2><code>debian/control</code></h2>
+						<pre><code>
+Source: libmojolicious-plugin-cgi-perl
+Section: perl
+Priority: optional
+Maintainer: Debian Perl Group &lt;pkg-perl-maintainers@lists.alioth.debian.org&gt;
+Uploaders: Alex Muntada &lt;alexm@alexm.org&gt;
+Build-Depends: debhelper (&gt;= 8)
+Build-Depends-Indep: libmojolicious-perl (&gt;= 4.00),
+ perl
+Standards-Version: 3.9.5
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-perl/packages/libmojolicious-plugin-cgi-perl.git
+Vcs-Git: git://anonscm.debian.org/pkg-perl/packages/libmojolicious-plugin-cgi-perl.git
+Homepage: https://metacpan.org/release/Mojolicious-Plugin-CGI
+
+Package: libmojolicious-plugin-cgi-perl
+Architecture: all
+Depends: ${misc:Depends}, ${perl:Depends},
+ libmojolicious-perl (&gt;= 4.00)
+Description: Mojolicious plugin to run CGI scripts
+ Mojolicious::Plugin::CGI plugin enables Mojolicious to run Perl CGI scripts.
+ It does so by forking a new process with a modified environment and reads
+ the STDOUT in a non-blocking manner.
+						</code></pre>
+					</section>
+					<section>
+						<h2><code>debian/copyright</code></h2>
+						<pre><code>
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://metacpan.org/release/Mojolicious-Plugin-CGI
+Upstream-Contact: Jan Henning Thorsen &lt;jhthorsen@cpan.org&gt;
+Upstream-Name: Mojolicious-Plugin-CGI
+
+Files: *
+Copyright: 2014, Jan Henning Thorsen &lt;jhthorsen@cpan.org&gt;
+License: Artistic-2.0
+
+Files: debian/*
+Copyright: 2014, Alex Muntada &lt;alexm@alexm.org&gt;
+License: Artistic or GPL-1+
+
+License: Artistic
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the Artistic License, which comes with Perl.
+ .
+ On Debian systems, the complete text of the Artistic License can be
+ found in `/usr/share/common-licenses/Artistic'.
+
+License: GPL-1+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 1, or (at your option)
+ any later version.
+ .
+ On Debian systems, the complete text of version 1 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-1'.
+
+License: Artistic-2.0
+ Copyright (c) 2000-2006, The Perl Foundation.
+ .
+ Everyone is permitted to copy and distribute verbatim copies of this
+ license document, but changing it is not allowed.
+ .
+ Preamble
+ .
+ This license establishes the terms under which a given free software
+ Package may be copied, modified, distributed, and/or redistributed.
+ The intent is that the Copyright Holder maintains some artistic
+ control over the development of that Package while still keeping the
+ Package available as open source and free software.
+ .
+ You are always permitted to make arrangements wholly outside of this
+ license directly with the Copyright Holder of a given Package. If the
+ terms of this license do not permit the full use that you propose to
+ make of the Package, you should contact the Copyright Holder and seek
+ a different licensing arrangement.
+ .
+ Definitions
+ .
+ "Copyright Holder" means the individual(s) or organization(s) named in
+ the copyright notice for the entire Package.
+ .
+ "Contributor" means any party that has contributed code or other
+ material to the Package, in accordance with the Copyright Holder's
+ procedures.
+ .
+ "You" and "your" means any person who would like to copy, distribute,
+ or modify the Package.
+ .
+ "Package" means the collection of files distributed by the Copyright
+ Holder, and derivatives of that collection and/or of those files. A
+ given Package may consist of either the Standard Version, or a
+ Modified Version.
+ .
+ "Distribute" means providing a copy of the Package or making it
+ accessible to anyone else, or in the case of a company or
+ organization, to others outside of your company or organization.
+ .
+ "Distributor Fee" means any fee that you charge for Distributing this
+ Package or providing support for this Package to another party. It
+ does not mean licensing fees.
+ .
+ "Standard Version" refers to the Package if it has not been modified,
+ or has been modified only in ways explicitly requested by the
+ Copyright Holder.
+ .
+ "Modified Version" means the Package, if it has been changed, and such
+ changes were not explicitly requested by the Copyright Holder.
+ .
+ "Original License" means this Artistic License as Distributed with the
+ Standard Version of the Package, in its current version or as it may
+ be modified by The Perl Foundation in the future.
+ .
+ "Source" form means the source code, documentation source, and
+ configuration files for the Package.
+ .
+ "Compiled" form means the compiled bytecode, object code, binary, or
+ any other form resulting from mechanical transformation or translation
+ of the Source form.
+ .
+ Permission for Use and Modification Without Distribution
+ .
+ (1) You are permitted to use the Standard Version and create and use
+     Modified Versions for any purpose without restriction, provided
+     that you do not Distribute the Modified Version.
+ .
+ Permissions for Redistribution of the Standard Version
+ .
+ (2) You may Distribute verbatim copies of the Source form of the
+     Standard Version of this Package in any medium without
+     restriction, either gratis or for a Distributor Fee, provided
+     that you duplicate all of the original copyright notices and
+     associated disclaimers. At your discretion, such verbatim copies
+     may or may not include a Compiled form of the Package.
+ .
+ (3) You may apply any bug fixes, portability changes, and other
+     modifications made available from the Copyright Holder. The
+     resulting Package will still be considered the Standard Version,
+     and as such will be subject to the Original License.
+ .
+ Distribution of Modified Versions of the Package as Source
+ .
+ (4) You may Distribute your Modified Version as Source (either gratis
+     or for a Distributor Fee, and with or without a Compiled form of
+     the Modified Version) provided that you clearly document how it
+     differs from the Standard Version, including, but not limited to,
+     documenting any non-standard features, executables, or modules,
+     and provided that you do at least ONE of the following:
+ .
+    (a) make the Modified Version available to the Copyright Holder
+        of the Standard Version, under the Original License, so that
+        the Copyright Holder may include your modifications in the
+        Standard Version.
+    (b) ensure that installation of your Modified Version does not
+        prevent the user installing or running the Standard Version.
+        In addition, the Modified Version must bear a name that is
+        different from the name of the Standard Version.
+    (c) allow anyone who receives a copy of the Modified Version to
+        make the Source form of the Modified Version available to
+        others under
+        (i)  the Original License or
+        (ii) a license that permits the licensee to freely copy,
+             modify and redistribute the Modified Version using the
+             same licensing terms that apply to the copy that the
+             licensee received, and requires that the Source form of
+             the Modified Version, and of any works derived from it,
+             be made freely available in that license fees are
+             prohibited but Distributor Fees are allowed.
+ .
+ Distribution of Compiled Forms of the Standard Version or Modified
+ Versions without the Source
+ .
+ (5) You may Distribute Compiled forms of the Standard Version without
+     the Source, provided that you include complete instructions on
+     how to get the Source of the Standard Version. Such instructions
+     must be valid at the time of your distribution. If these
+     instructions, at any time while you are carrying out such
+     distribution, become invalid, you must provide new instructions
+     on demand or cease further distribution. If you provide valid
+     instructions or cease distribution within thirty days after you
+     become aware that the instructions are invalid, then you do not
+     forfeit any of your rights under this license.
+ .
+ (6) You may Distribute a Modified Version in Compiled form without
+     the Source, provided that you comply with Section 4 with respect
+     to the Source of the Modified Version.
+ .
+ Aggregating or Linking the Package
+ .
+ (7) You may aggregate the Package (either the Standard Version or
+     Modified Version) with other packages and Distribute the
+     resulting aggregation provided that you do not charge a licensing
+     fee for the Package. Distributor Fees are permitted, and licensing
+     fees for other components in the aggregation are permitted. The
+     terms of this license apply to the use and Distribution of the
+     Standard or Modified Versions as included in the aggregation.
+ .
+ (8) You are permitted to link Modified and Standard Versions with
+     other works, to embed the Package in a larger work of your own,
+     or to build stand-alone binary or bytecode versions of
+     applications that include the Package, and Distribute the result
+     without restriction, provided the result does not expose a direct
+     interface to the Package.
+ .
+ Items That are Not Considered Part of a Modified Version
+ .
+ (9) Works (including, but not limited to, modules and scripts) that
+     merely extend or make use of the Package, do not, by themselves,
+     cause the Package to be a Modified Version. In addition, such
+     works are not considered parts of the Package itself, and are
+     not subject to the terms of this license.
+ .
+ General Provisions
+ .
+ (10) Any use, modification, and distribution of the Standard or
+      Modified Versions is governed by this Artistic License. By
+      using, modifying or distributing the Package, you accept this
+      license. Do not use, modify, or distribute the Package, if you
+      do not accept this license.
+ .
+ (11) If your Modified Version has been derived from a Modified
+      Version made by someone other than you, you are nevertheless
+      required to ensure that your Modified Version complies with
+      the requirements of this license.
+ .
+ (12) This license does not grant you the right to use any trademark,
+      service mark, tradename, or logo of the Copyright Holder.
+ .
+ (13) This license includes the non-exclusive, worldwide,
+      free-of-charge patent license to make, have made, use, offer to
+      sell, import and otherwise transfer the Package with respect to
+      any patent claims licensable by the Copyright Holder that are
+      necessarily infringed by the Package. If you institute patent
+      litigation (including a cross-claim or counterclaim) against
+      any party alleging that the Package constitutes direct or
+      contributory patent infringement, then this Artistic License to
+      you shall terminate on the date that such litigation is filed.
+ .
+ (14) Disclaimer of Warranty: THE PACKAGE IS PROVIDED BY THE COPYRIGHT
+      HOLDER AND CONTRIBUTORS "AS IS' AND WITHOUT ANY EXPRESS OR
+      IMPLIED WARRANTIES. THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+      FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT ARE
+      DISCLAIMED TO THE EXTENT PERMITTED BY YOUR LOCAL LAW. UNLESS
+      REQUIRED BY LAW, NO COPYRIGHT HOLDER OR CONTRIBUTOR WILL BE
+      LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+      DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE, EVEN
+      IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+						</code></pre>
 					</section>
 				</section>
 
